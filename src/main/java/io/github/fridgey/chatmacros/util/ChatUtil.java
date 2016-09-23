@@ -31,7 +31,19 @@ public class ChatUtil
             return Optional.absent();
         }
         String name = firstParts[firstParts.length - 1].replaceAll("\\[|\\]", "");
-        System.out.println(name);
         return Optional.of(name);
+    }
+    
+    // &8[&fL&8]&7=&8[&9SquishySquish&8]&7=&8[&bContributor&8]&7=&8[&aRefrigerbater&8] &fmeep
+    public static String stripTags(String message)
+    {
+        String[] firstParts = message.substring(0, message.indexOf(" ")).split("=");
+        String chat = message.substring(message.indexOf(" "));
+        
+        if (firstParts.length < 3)
+        {
+            return message;
+        }
+        return firstParts[0] + "=" + firstParts[firstParts.length - 1] + chat;
     }
 }

@@ -12,24 +12,17 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 
-import io.github.fridgey.chatmacros.model.MasterMacroList;
+import io.github.fridgey.chatmacros.macro.MasterMacroList;
 import net.minecraft.client.Minecraft;
 
-public class MacroConfig implements Cloneable
+public class MacroConfig
 {
-    private MasterMacroList list = new MasterMacroList();
-    
     private static final File dir = new File(Minecraft.getMinecraft().mcDataDir,
             "liteconfig" + File.separator + "config.1.10.2" + File.separator + "ChatMacros");
     private static final File path = new File(dir, "macros.json");
     
-    public MacroConfig() {}
+    private MasterMacroList list = new MasterMacroList();
     
-    public MacroConfig(MasterMacroList list)
-    {
-        this.list = list;
-    }
-
     public void init()
     {
         if (!path.exists())
@@ -55,9 +48,9 @@ public class MacroConfig implements Cloneable
         }
     }
     
-    private void importSettings(MacroConfig base, MacroConfig copy) throws CloneNotSupportedException
+    private void importSettings(MacroConfig copy)
     {
-        base = (MacroConfig) copy.clone();
+        this.list = copy.list;
     }
 
     private void save() throws IOException
@@ -75,7 +68,7 @@ public class MacroConfig implements Cloneable
         {
             Gson gson = new GsonBuilder().setPrettyPrinting().create();
             MacroConfig config = gson.fromJson(reader, MacroConfig.class);
-            importSettings(this, config);
+            importSettings(config);
         }
     }
 

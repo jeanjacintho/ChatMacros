@@ -6,6 +6,7 @@ import org.lwjgl.input.Keyboard;
 
 import com.mojang.realmsclient.dto.RealmsServer;
 import com.mumfrey.liteloader.ChatListener;
+import com.mumfrey.liteloader.InitCompleteListener;
 import com.mumfrey.liteloader.JoinGameListener;
 import com.mumfrey.liteloader.OutboundChatFilter;
 import com.mumfrey.liteloader.Tickable;
@@ -13,10 +14,13 @@ import com.mumfrey.liteloader.core.LiteLoader;
 import com.mumfrey.liteloader.modconfig.ConfigStrategy;
 import com.mumfrey.liteloader.modconfig.ExposableOptions;
 
-import io.github.fridgey.chatmacros.config.Config;
+import io.github.fridgey.chatmacros.config.GuiConfig;
 import io.github.fridgey.chatmacros.config.MacroConfig;
+import io.github.fridgey.chatmacros.gui.MacroConfigMenu;
+import io.github.fridgey.chatmacros.gui.MacroMenu;
+import io.github.fridgey.chatmacros.gui.MainGui;
+import io.github.fridgey.chatmacros.gui.SettingsMenu;
 import io.github.fridgey.chatmacros.util.ChatUtil;
-import io.github.fridgey.chatmacros.view.MainOverview;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
@@ -30,13 +34,16 @@ import net.minecraft.util.text.event.ClickEvent.Action;
 
 @ExposableOptions(strategy = ConfigStrategy.Versioned, filename = "chatmacros.json")
 public class LiteModChatMacros
-        implements Tickable, JoinGameListener, ChatListener, OutboundChatFilter
+        implements Tickable, JoinGameListener, ChatListener, OutboundChatFilter, InitCompleteListener
 {
     private static LiteModChatMacros instance;
 
-    private MainOverview mainOverview;
+    private MainGui mainOverview;
+    private MacroMenu macroMenu;
+    private MacroConfigMenu macroConfigMenu;
+    private SettingsMenu settingsMenu;
     private KeyBinding activateKeyBinding;
-    private Config config;
+    private GuiConfig guiConfig;
     private MacroConfig macroConfig;
 
     public LiteModChatMacros()
@@ -52,12 +59,20 @@ public class LiteModChatMacros
                 Keyboard.CHAR_NONE, ChatColor.translateAlternateColorCodes('&', "&a&l&n&oFridgey"));
         LiteLoader.getInput().registerKeyBinding(activateKeyBinding);
 
-        this.mainOverview = new MainOverview();
-        this.config = new Config();
+        this.guiConfig = new GuiConfig();
+        this.guiConfig.init();
+        
         this.macroConfig = new MacroConfig();
-
-        this.config.init();
         this.macroConfig.init();
+    }
+
+    @Override
+    public void onInitCompleted(Minecraft minecraft, LiteLoader loader)
+    {
+        this.mainOverview = new MainGui();
+        this.macroMenu = new MacroMenu();
+        this.macroConfigMenu = new MacroConfigMenu();
+        this.settingsMenu = new SettingsMenu();
     }
 
     @Override
@@ -69,11 +84,11 @@ public class LiteModChatMacros
     @Override
     public String getVersion()
     {
-        return ChatColor.AQUA + "2.0";
+        return ChatColor.AQUA.toString() + ChatColor.BOLD + "2.0";
     }
 
     @Override
-    public void upgradeSettings(String version, File configPath, File oldConfigPath){}
+    public void upgradeSettings(String version, File configPath, File oldConfigPath) {}
 
     @Override
     public void onChat(ITextComponent chat, String message)
@@ -100,12 +115,6 @@ public class LiteModChatMacros
             args[0] = args[0].substring(1);
         }
 
-        if (args.length == 1)
-        {
-            // help info
-            return false;
-        }
-
         if (args.length > 1)
         {
             if (args[1].equalsIgnoreCase("copy"))
@@ -114,6 +123,16 @@ public class LiteModChatMacros
                 for (int i = 3; i < args.length; i++)
                 {
                     toCopy += " " + args[i];
+                }
+                toCopy = toCopy.trim();
+                if (!guiConfig.copyWithColors())
+                {
+                    toCopy = ChatColor
+                            .stripColor(ChatColor.translateAlternateColorCodes('&', toCopy));
+                }
+                if (!guiConfig.displayFactionAndRankTags())
+                {
+                    toCopy = ChatUtil.stripTags(toCopy);
                 }
                 GuiScreen.setClipboardString(toCopy.trim());
 
@@ -136,7 +155,7 @@ public class LiteModChatMacros
     public void onJoinGame(INetHandler netHandler, SPacketJoinGame joinGamePacket,
             ServerData serverData, RealmsServer realmsServer)
     {
-
+        mainOverview.clearChatLines();
     }
 
     public static LiteModChatMacros getInstance()
@@ -144,14 +163,29 @@ public class LiteModChatMacros
         return instance;
     }
 
-    public MainOverview getMainOverview()
+    public MainGui getMainOverview()
     {
         return mainOverview;
     }
-
-    public Config getConfig()
+    
+    public MacroMenu getMacroMenu()
     {
-        return config;
+        return macroMenu;
+    }
+    
+    public MacroConfigMenu getMacroConfigMenu()
+    {
+        return macroConfigMenu;
+    }
+    
+    public SettingsMenu getSettingsMenu()
+    {
+        return settingsMenu;
+    }
+
+    public GuiConfig getGuiConfig()
+    {
+        return guiConfig;
     }
 
     public MacroConfig getMacroConfig()
