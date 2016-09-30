@@ -1,13 +1,10 @@
 package io.github.fridgey.chatmacros.gui;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.github.fridgey.chatmacros.LiteModChatMacros;
 import io.github.fridgey.chatmacros.macro.Macro;
-import net.md_5.bungee.api.ChatColor;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 
@@ -15,29 +12,22 @@ public class MacroMenu extends GuiScreen
 {
     private LiteModChatMacros mod = LiteModChatMacros.getInstance();
     
-    private String title = "Pre-Init";
-    private List<String> macros;
-    private Map<Position, String> currentMacroPositions;
-    
-    public MacroMenu()
-    {
-        this.macros = new ArrayList<>(mod.getMacroConfig().getList().getMacroNames());
-        this.currentMacroPositions = new HashMap<>();
-    }
+    private String name = "";
+    private List<Integer> macros;
     
     @Override
     public void initGui()
     {
         super.initGui();
-        int c = 0;
-        int buttonsPerRow = this.width / 70;
+        this.macros = new ArrayList<>(mod.getMacroConfig().getList().getMacroIndicies());
+        int buttonsPerRow = this.width / 80;
         int row = 0;
         int column = 0;
-        System.out.println(buttonsPerRow);
-        for (String name : macros)
+        for (int index : macros)
         {
-            Macro macro = mod.getMacroConfig().getList().getMacro(name);
-            this.buttonList.add(new GuiButton(c++, 15 + (70 * column++), (this.height / 2) + (30 * row), 50, 20, macro.getColor() + name));
+            Macro macro = mod.getMacroConfig().getList().getMacro(index);
+            String name = macro.getName();
+            this.buttonList.add(new GuiButton(index, 15 + (70 * column++), 30 + (30 * row), 50, 20, macro.getColor() + name));
             if (column > buttonsPerRow)
             {
                 column = 0;
@@ -50,30 +40,30 @@ public class MacroMenu extends GuiScreen
     public void drawScreen(int mouseX, int mouseY, float f)
     {
         drawDefaultBackground();
-        drawCenteredString(fontRendererObj, title, this.width / 2, 10, 0xFFFFFFFF);
+        drawCenteredString(fontRendererObj, "Choose a macro for: " + name, this.width / 2, 10, 0xFFFFFFFF);
         
         for (int i = 0; i < this.buttonList.size(); i++)
         {
             ((GuiButton) this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);
         }
-        
-        
     }
     
-    public void setTitle(String title)
+    @Override
+    public void actionPerformed(GuiButton button)
     {
-        this.title = title;
+        int index = button.id;
+        String cmd = mod.getMacroConfig().getList().getMacro(index).getMessage();
+        sendCommand(cmd);
+        mc.setIngameFocus();
     }
     
-    private class Position
+    private void sendCommand(String command)
     {
-        public int x;
-        public int y;
-        
-        public Position(int x, int y)
-        {
-            this.x = x;
-            this.y = y;
-        }
+        sendChatMessage(command.replaceAll("%p|%P", name));
+    }
+    
+    public void setName(String name)
+    {
+        this.name = name;
     }
 }

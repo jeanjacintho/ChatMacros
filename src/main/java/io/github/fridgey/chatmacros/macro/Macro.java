@@ -4,14 +4,15 @@ import net.md_5.bungee.api.ChatColor;
 
 public class Macro
 {
+    public static final Macro BLANK = new Macro("", "", ChatColor.WHITE);
     private String name;
-    private String command;
+    private String message;
     private ChatColor color;
 
-    public Macro(String name, String command, ChatColor color)
+    public Macro(String name, String message, ChatColor color)
     {
         this.name = name;
-        this.command = command;
+        this.message = message;
         this.color = color;
     }
 
@@ -25,14 +26,14 @@ public class Macro
         this.name = name;
     }
 
-    public String getCommand()
+    public String getMessage()
     {
-        return command;
+        return message;
     }
 
-    public void setCommand(String command)
+    public void setMessage(String command)
     {
-        this.command = command;
+        this.message = command;
     }
 
     public ChatColor getColor()
@@ -51,7 +52,7 @@ public class Macro
         final int prime = 31;
         int result = 1;
         result = prime * result + ((color == null) ? 0 : color.hashCode());
-        result = prime * result + ((command == null) ? 0 : command.hashCode());
+        result = prime * result + ((message == null) ? 0 : message.hashCode());
         result = prime * result + ((name == null) ? 0 : name.hashCode());
         return result;
     }
@@ -68,11 +69,11 @@ public class Macro
         Macro other = (Macro) obj;
         if (color != other.color)
             return false;
-        if (command == null)
+        if (message == null)
         {
-            if (other.command != null)
+            if (other.message != null)
                 return false;
-        } else if (!command.equals(other.command))
+        } else if (!message.equals(other.message))
             return false;
         if (name == null)
         {

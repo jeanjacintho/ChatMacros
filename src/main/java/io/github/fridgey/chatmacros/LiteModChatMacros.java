@@ -71,7 +71,7 @@ public class LiteModChatMacros
     {
         this.mainOverview = new MainGui();
         this.macroMenu = new MacroMenu();
-        this.macroConfigMenu = new MacroConfigMenu();
+        this.macroConfigMenu = new MacroConfigMenu(this.macroConfig.getList());
         this.settingsMenu = new SettingsMenu();
     }
 

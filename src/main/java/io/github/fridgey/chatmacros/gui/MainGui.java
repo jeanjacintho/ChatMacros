@@ -109,7 +109,7 @@ public class MainGui extends GuiScreen
             {
                 String clicked = currentChatLinePositions.get(pos).getLine();
                 String name = ChatUtil.parseChat(clicked).get();
-                mod.getMacroMenu().setTitle("Choose a macro for: " + name);
+                mod.getMacroMenu().setName(name);
                 mc.displayGuiScreen(mod.getMacroMenu());
                 break;
             }

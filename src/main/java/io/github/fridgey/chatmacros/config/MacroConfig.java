@@ -12,6 +12,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.mumfrey.liteloader.util.log.LiteLoaderLogger;
 
+import io.github.fridgey.chatmacros.macro.Macro;
 import io.github.fridgey.chatmacros.macro.MasterMacroList;
 import net.minecraft.client.Minecraft;
 
@@ -20,9 +21,9 @@ public class MacroConfig
     private static final File dir = new File(Minecraft.getMinecraft().mcDataDir,
             "liteconfig" + File.separator + "config.1.10.2" + File.separator + "ChatMacros");
     private static final File path = new File(dir, "macros.json");
-    
+
     private MasterMacroList list = new MasterMacroList();
-    
+
     public void init()
     {
         if (!path.exists())
@@ -30,11 +31,13 @@ public class MacroConfig
             dir.mkdirs();
             try
             {
+                list.addNewMacro(Macro.BLANK);
                 save();
                 LiteLoaderLogger.info("Successfully created macro config file.");
             } catch (Exception e)
             {
-                LiteLoaderLogger.warning("Could not save macro config to file. Error: " + e.getMessage());
+                LiteLoaderLogger
+                        .warning("Could not save macro config to file. Error: " + e.getMessage());
             }
         }
 
@@ -47,13 +50,17 @@ public class MacroConfig
             LiteLoaderLogger.warning("Could not load macro config file. Error: " + e.getMessage());
         }
     }
-    
+
     private void importSettings(MacroConfig copy)
     {
         this.list = copy.list;
+        if (list.getSize() == 0)
+        {
+            list.addNewMacro(Macro.BLANK);
+        }
     }
 
-    private void save() throws IOException
+    public void save() throws IOException
     {
         try (Writer writer = new FileWriter(path))
         {

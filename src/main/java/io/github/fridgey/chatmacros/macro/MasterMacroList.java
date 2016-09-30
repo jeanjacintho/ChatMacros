@@ -1,47 +1,67 @@
 package io.github.fridgey.chatmacros.macro;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 public class MasterMacroList
 {
-    private final Map<String, Macro> macros;
+    private final List<Macro> macros;
     
     public MasterMacroList()
     {
-        this.macros = new HashMap<>();
+        this.macros = new ArrayList<>();
     }
     
     public void addNewMacro(Macro macro)
     {
-        macros.put(macro.getName(), macro);
+        macros.add(macro);
     }
     
-    public void deleteMacro(String name)
+    public void deleteMacro(int index)
     {
-        macros.remove(name);
+        macros.remove(index);
     }
     
     public boolean search(String name)
     {
-        return macros.containsKey(name);
+        for (Macro macro : macros)
+        {
+            if (macro.getName().equals(name))
+            {
+                return true;
+            }
+        }
+        return false;
     }
     
-    public Set<String> getMacroNames()
+    public List<String> getMacroNames()
     {
-        return macros.keySet();
+        List<String> list = new ArrayList<>();
+        for (Macro macro : getMacros())
+        {
+            list.add(macro.getName());
+        }
+        return list;
     }
     
-    public Set<Macro> getMacros()
+    public List<Integer> getMacroIndicies()
     {
-        return new HashSet<>(macros.values());
+        List<Integer> indicies = new ArrayList<>();
+        for (int i = 0; i < macros.size(); i++)
+        {
+            indicies.add(i);
+        }
+        return indicies;
     }
     
-    public Macro getMacro(String name)
+    public List<Macro> getMacros()
     {
-        return macros.get(name);
+        return macros;
+    }
+    
+    public Macro getMacro(int index)
+    {
+        return macros.get(index);
     }
     
     public int getSize()
