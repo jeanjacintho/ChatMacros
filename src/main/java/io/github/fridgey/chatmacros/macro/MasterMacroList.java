@@ -6,22 +6,22 @@ import java.util.List;
 public class MasterMacroList
 {
     private final List<Macro> macros;
-    
+
     public MasterMacroList()
     {
         this.macros = new ArrayList<>();
     }
-    
+
     public void addNewMacro(Macro macro)
     {
         macros.add(macro);
     }
-    
+
     public void deleteMacro(int index)
     {
         macros.remove(index);
     }
-    
+
     public boolean search(String name)
     {
         for (Macro macro : macros)
@@ -33,7 +33,7 @@ public class MasterMacroList
         }
         return false;
     }
-    
+
     public List<String> getMacroNames()
     {
         List<String> list = new ArrayList<>();
@@ -43,7 +43,7 @@ public class MasterMacroList
         }
         return list;
     }
-    
+
     public List<Integer> getMacroIndicies()
     {
         List<Integer> indicies = new ArrayList<>();
@@ -53,17 +53,17 @@ public class MasterMacroList
         }
         return indicies;
     }
-    
+
     public List<Macro> getMacros()
     {
         return macros;
     }
-    
+
     public Macro getMacro(int index)
     {
         return macros.get(index);
     }
-    
+
     public int getSize()
     {
         return macros.size();

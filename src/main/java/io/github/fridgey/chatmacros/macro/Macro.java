@@ -2,7 +2,7 @@ package io.github.fridgey.chatmacros.macro;
 
 import net.md_5.bungee.api.ChatColor;
 
-public class Macro
+public class Macro implements Cloneable
 {
     public static final Macro BLANK = new Macro("", "", ChatColor.WHITE);
     private String name;
@@ -82,5 +82,18 @@ public class Macro
         } else if (!name.equals(other.name))
             return false;
         return true;
+    }
+
+    @Override
+    public Macro clone()
+    {
+        try
+        {
+            return (Macro) super.clone();
+        } catch (CloneNotSupportedException e)
+        {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

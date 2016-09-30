@@ -8,7 +8,7 @@ public class StringUtil
         {
             return input;
         }
-        
+
         String[] words = input.split("_");
         int c = 0;
         for (String word : words)
@@ -19,7 +19,7 @@ public class StringUtil
         }
         return String.join(" ", words);
     }
-    
+
     public static String lowerAndUnderscore(String input)
     {
         return input.toLowerCase().replace(" ", "_");

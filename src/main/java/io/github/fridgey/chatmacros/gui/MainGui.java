@@ -33,8 +33,10 @@ public class MainGui extends GuiScreen
     public void initGui()
     {
         super.initGui();
-        GuiButton macroConfigButton = new GuiButton(0, this.width / 2 - 75, 40, 70, 20, ChatColor.GREEN + "Macro Config");
-        GuiButton guiConfigButton = new GuiButton(1, this.width / 2 + 5, 40, 70, 20, ChatColor.GREEN + "Settings");
+        GuiButton macroConfigButton =
+                new GuiButton(0, this.width / 2 - 75, 40, 70, 20, ChatColor.GREEN + "Macro Config");
+        GuiButton guiConfigButton =
+                new GuiButton(1, this.width / 2 + 5, 40, 70, 20, ChatColor.GREEN + "Settings");
         this.buttonList.add(macroConfigButton);
         this.buttonList.add(guiConfigButton);
     }
@@ -44,19 +46,21 @@ public class MainGui extends GuiScreen
     {
         drawDefaultBackground();
         drawCenteredString(this.getFontRenderer(), "Chat Macros", this.width / 2, 10, 0xFFFFFFFF);
-        
+
         int heightAddition = this.getShownChatLines() * 10;
-        GuiScreen.drawRect(15,  this.height - 24 - heightAddition,  this.width - 15,  this.height - 24, 0xA1000000);
-        
+        GuiScreen.drawRect(15, this.height - 24 - heightAddition, this.width - 15, this.height - 24,
+                0xA1000000);
+
         int c = 0;
-        for (int i = index; i < Math.min(mod.getGuiConfig().getChatLines(), guiLines.size()) + index; i++)
+        for (int i = index; i < Math.min(mod.getGuiConfig().getChatLines(), guiLines.size())
+                + index; i++)
         {
             GuiLine line = guiLines.get(i);
             line.draw(this, (this.height - 33) - (10 * c));
             currentChatLinePositions.put((this.height - 33) - (10 * c), line);
             c++;
         }
-        
+
         for (int i = 0; i < this.buttonList.size(); i++)
         {
             ((GuiButton) this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);
@@ -81,10 +85,7 @@ public class MainGui extends GuiScreen
     protected void keyTyped(char typedChar, int keyCode) throws IOException
     {
         /*
-         * 1: Escape
-         * 28: Return, 156: Enter on keypad
-         * 200: Up
-         * 208: Down
+         * 1: Escape 28: Return, 156: Enter on keypad 200: Up 208: Down
          */
         if (keyCode == 1)
         {
@@ -96,13 +97,12 @@ public class MainGui extends GuiScreen
     public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        if (mouseX < 15 || mouseX > this.width - 15
-                || mouseY > this.height - 24 
+        if (mouseX < 15 || mouseX > this.width - 15 || mouseY > this.height - 24
                 || mouseY < (this.height - 24) - (10 * getShownChatLines()))
         {
             return;
         }
-        
+
         for (Integer pos : currentChatLinePositions.keySet())
         {
             if (mouseY >= pos && mouseY <= pos + 10)
@@ -127,14 +127,14 @@ public class MainGui extends GuiScreen
             {
                 return;
             }
-            if (index + mod.getGuiConfig().getScrollSpeed() >= guiLines.size() - mod.getGuiConfig().getChatLines() + 1)
+            if (index + mod.getGuiConfig().getScrollSpeed() >= guiLines.size()
+                    - mod.getGuiConfig().getChatLines() + 1)
             {
                 index = guiLines.size() - mod.getGuiConfig().getChatLines();
                 return;
             }
             index += mod.getGuiConfig().getScrollSpeed();
-        }
-        else if (scroll < 0)
+        } else if (scroll < 0)
         {
             if (index - mod.getGuiConfig().getScrollSpeed() < 0)
             {
@@ -150,28 +150,28 @@ public class MainGui extends GuiScreen
     {
         return false;
     }
-    
+
     @Override
     public void onGuiClosed()
     {
         index = 0;
     }
-    
+
     public void addChatLine(String string)
     {
         guiLines.add(0, new GuiLine(ChatColor.translateAlternateColorCodes('&', string)));
     }
-    
+
     public void clearChatLines()
     {
         guiLines.clear();
     }
-    
+
     public int getShownChatLines()
     {
         return Math.min(mod.getGuiConfig().getChatLines(), guiLines.size());
     }
-    
+
     public FontRenderer getFontRenderer()
     {
         return this.fontRendererObj;

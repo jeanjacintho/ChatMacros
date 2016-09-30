@@ -33,8 +33,8 @@ import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.ClickEvent.Action;
 
 @ExposableOptions(strategy = ConfigStrategy.Versioned, filename = "chatmacros.json")
-public class LiteModChatMacros
-        implements Tickable, JoinGameListener, ChatListener, OutboundChatFilter, InitCompleteListener
+public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListener,
+        OutboundChatFilter, InitCompleteListener
 {
     private static LiteModChatMacros instance;
 
@@ -61,7 +61,7 @@ public class LiteModChatMacros
 
         this.guiConfig = new GuiConfig();
         this.guiConfig.init();
-        
+
         this.macroConfig = new MacroConfig();
         this.macroConfig.init();
     }
@@ -88,12 +88,14 @@ public class LiteModChatMacros
     }
 
     @Override
-    public void upgradeSettings(String version, File configPath, File oldConfigPath) {}
+    public void upgradeSettings(String version, File configPath, File oldConfigPath)
+    {}
 
     @Override
     public void onChat(ITextComponent chat, String message)
     {
-        String newMessage = message.replaceAll(String.valueOf(ChatColor.COLOR_CHAR), "&").replace("&r", "");
+        String newMessage =
+                message.replaceAll(String.valueOf(ChatColor.COLOR_CHAR), "&").replace("&r", "");
 
         chat.getStyle().setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/cm copy " + newMessage));
         if (ChatUtil.parseChat(message.replace(ChatColor.RESET.toString(), "")).isPresent())
@@ -167,17 +169,17 @@ public class LiteModChatMacros
     {
         return mainOverview;
     }
-    
+
     public MacroMenu getMacroMenu()
     {
         return macroMenu;
     }
-    
+
     public MacroConfigMenu getMacroConfigMenu()
     {
         return macroConfigMenu;
     }
-    
+
     public SettingsMenu getSettingsMenu()
     {
         return settingsMenu;

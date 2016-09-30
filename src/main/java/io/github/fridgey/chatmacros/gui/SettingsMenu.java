@@ -14,43 +14,48 @@ import net.minecraft.client.gui.GuiSlider.FormatHelper;
 public class SettingsMenu extends GuiScreen
 {
     private LiteModChatMacros mod = LiteModChatMacros.getInstance();
-    
+
     private GuiCheckbox colorsBox;
     private GuiCheckbox factionBox;
     private GuiSlider chatLines;
     private GuiSlider scrollSpeed;
-    
+
     @Override
     public void initGui()
     {
         super.initGui();
-        this.colorsBox = new GuiCheckbox(0, this.width / 2 - 50, this.height / 4, "Copy With Colors");
-        this.factionBox = new GuiCheckbox(1, this.width / 2 - 90, this.height / 4 + 16, "Copy With Faction And Rank Tags");
-        this.chatLines = new GuiSlider(getResponder() , 2, this.width / 2 - 75, this.height / 4 + 36, "Chat Lines", 5f, 100f, (float) mod.getGuiConfig().getChatLines(), getFormatter());
-        this.scrollSpeed = new GuiSlider(getResponder() , 3, this.width / 2 - 75, this.height / 4 + 64, "Scroll Speed", 1f, 10f, (float) mod.getGuiConfig().getScrollSpeed(), getFormatter());
-        
+        this.colorsBox =
+                new GuiCheckbox(0, this.width / 2 - 50, this.height / 4, "Copy With Colors");
+        this.factionBox = new GuiCheckbox(1, this.width / 2 - 90, this.height / 4 + 16,
+                "Copy With Faction And Rank Tags");
+        this.chatLines = new GuiSlider(getResponder(), 2, this.width / 2 - 75, this.height / 4 + 36,
+                "Chat Lines", 5f, 100f, (float) mod.getGuiConfig().getChatLines(), getFormatter());
+        this.scrollSpeed = new GuiSlider(getResponder(), 3, this.width / 2 - 75,
+                this.height / 4 + 64, "Scroll Speed", 1f, 10f,
+                (float) mod.getGuiConfig().getScrollSpeed(), getFormatter());
+
         this.colorsBox.checked = mod.getGuiConfig().copyWithColors();
         this.factionBox.checked = mod.getGuiConfig().displayFactionAndRankTags();
-        
+
         this.buttonList.add(this.colorsBox);
         this.buttonList.add(this.factionBox);
         this.buttonList.add(this.chatLines);
         this.buttonList.add(this.scrollSpeed);
         System.out.println(this.scrollSpeed.getButtonWidth());
     }
-    
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float f)
     {
         drawDefaultBackground();
         drawCenteredString(fontRendererObj, "Settings", this.width / 2, 10, 0xFFFFFFFF);
-        
+
         for (int i = 0; i < this.buttonList.size(); i++)
         {
             this.buttonList.get(i).drawButton(this.mc, mouseX, mouseY);
         }
     }
-    
+
     @Override
     public void actionPerformed(GuiButton button) throws IOException
     {
@@ -61,26 +66,25 @@ public class SettingsMenu extends GuiScreen
             if (button.id == 0)
             {
                 mod.getGuiConfig().setCopyWithColors(check.checked);
-            }
-            else if (button.id == 1)
+            } else if (button.id == 1)
             {
                 mod.getGuiConfig().setDisplayFactionAndRankTags(check.checked);
             }
             mod.getGuiConfig().save();
         }
     }
-    
+
     private GuiResponder getResponder()
     {
         return new GuiResponder()
         {
-            
+
             @Override
             public void setEntryValue(int id, String value)
             {
                 // derp
             }
-            
+
             @Override
             public void setEntryValue(int id, float value)
             {
@@ -100,7 +104,7 @@ public class SettingsMenu extends GuiScreen
                     e.printStackTrace();
                 }
             }
-            
+
             @Override
             public void setEntryValue(int id, boolean value)
             {
@@ -108,7 +112,7 @@ public class SettingsMenu extends GuiScreen
             }
         };
     }
-    
+
     private FormatHelper getFormatter()
     {
         return new FormatHelper()

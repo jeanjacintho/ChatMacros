@@ -19,12 +19,12 @@ public class GuiConfig
     private static final File dir = new File(Minecraft.getMinecraft().mcDataDir,
             "liteconfig" + File.separator + "config.1.10.2" + File.separator + "ChatMacros");
     private static final File path = new File(dir, "config.json");
-    
+
     private boolean copyWithColors = true;
     private boolean displayFactionAndRankTags = true;
     private int chatLines = 10;
     private int scrollSpeed = 1;
-    
+
     public void init()
     {
         if (!path.exists())
@@ -75,7 +75,7 @@ public class GuiConfig
             GuiConfig config = gson.fromJson(reader, GuiConfig.class);
             importSettings(config);
         }
-    }    
+    }
 
     public boolean copyWithColors()
     {
@@ -104,7 +104,7 @@ public class GuiConfig
     {
         return chatLines;
     }
-    
+
     public void setChatLines(int chatLines)
     {
         this.chatLines = chatLines;

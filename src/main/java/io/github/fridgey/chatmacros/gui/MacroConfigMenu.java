@@ -31,14 +31,15 @@ public class MacroConfigMenu extends GuiScreen
     public void initGui()
     {
         super.initGui();
+        index = 0;
         this.buttonList.add(new GuiButton(0, this.width / 2 - 55, 50, 20, 20, "<"));
         this.buttonList.add(new GuiButton(1, this.width / 2 + 35, 50, 20, 20, ">"));
         this.buttonList
                 .add(new GuiButton(2, this.width / 2 - 55, 75, 50, 20, ChatColor.GREEN + "Add"));
         this.buttonList
                 .add(new GuiButton(3, this.width / 2 + 5, 75, 50, 20, ChatColor.RED + "Delete"));
-        this.buttonList
-                .add(new GuiButton(4, this.width - 105, this.height - 25, 100, 20, ChatColor.WHITE + "Save"));
+        this.buttonList.add(new GuiButton(4, this.width - 105, this.height - 25, 100, 20,
+                ChatColor.WHITE + "Save"));
         this.nameField = new GuiTextField(0, fontRendererObj, this.width / 2 - 50, 120, 100, 15);
         this.macroField = new GuiTextField(0, fontRendererObj, this.width / 2 - 50, 170, 100, 15);
         this.colorField =
@@ -55,7 +56,7 @@ public class MacroConfigMenu extends GuiScreen
         drawCenteredString(fontRendererObj, "Macro Config", this.width / 2, 10, 0xFFFFFFFF);
         drawCenteredString(fontRendererObj, "Macro " + (index + 1), this.width / 2, 55, 0xFFFFFFFF);
         drawCenteredString(fontRendererObj, "Name", this.width / 2, 105, 0xFFFFFFFF);
-        drawCenteredString(fontRendererObj, "Message", this.width / 2, 155, 0xFFFFFFFF);
+        drawCenteredString(fontRendererObj, "Message (Use %p for player name)", this.width / 2, 155, 0xFFFFFFFF);
         drawCenteredString(fontRendererObj, "Color", this.width / 2, 205, 0xFFFFFFFF);
 
         for (int i = 0; i < this.buttonList.size(); i++)
@@ -99,7 +100,7 @@ public class MacroConfigMenu extends GuiScreen
             reloadMacro();
         } else if (id == 2)
         {
-            Macro macro = Macro.BLANK;
+            Macro macro = Macro.BLANK.clone();
             list.addNewMacro(macro);
             index = list.getSize() - 1;
             reloadMacro();
@@ -141,7 +142,7 @@ public class MacroConfigMenu extends GuiScreen
             this.macroField.setText("");
             this.colorField.setIndex(15);
         }
-        
+
         if (list.getSize() > 0 && index >= 0)
         {
             this.nameField.setText(list.getMacro(index).getName());
@@ -151,7 +152,7 @@ public class MacroConfigMenu extends GuiScreen
         {
             this.macroField.setText(list.getMacro(index).getMessage());
         }
-        
+
         if (list.getSize() > 0 && index >= 0)
         {
             this.colorField.setColor(list.getMacro(index).getColor());

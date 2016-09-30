@@ -56,8 +56,10 @@ public class GuiToggleField extends Gui
             return;
         }
         ChatColor color = items[index];
-        drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1, this.yPosition + this.height + 1, -6250336);
-        drawRect(this.xPosition, this.yPosition, this.xPosition + this.width, this.yPosition + this.height, -16777216);
+        drawRect(this.xPosition - 1, this.yPosition - 1, this.xPosition + this.width + 1,
+                this.yPosition + this.height + 1, -6250336);
+        drawRect(this.xPosition, this.yPosition, this.xPosition + this.width,
+                this.yPosition + this.height, -16777216);
         drawCenteredString(fontRenderer, StringUtil.capitalizeAndSpace(color.getName()),
                 xPosition + (width / 2), yPosition + (height / 2) - 4, color.getHex());
     }

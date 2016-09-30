@@ -11,10 +11,10 @@ import net.minecraft.client.gui.GuiScreen;
 public class MacroMenu extends GuiScreen
 {
     private LiteModChatMacros mod = LiteModChatMacros.getInstance();
-    
+
     private String name = "";
     private List<Integer> macros;
-    
+
     @Override
     public void initGui()
     {
@@ -27,7 +27,8 @@ public class MacroMenu extends GuiScreen
         {
             Macro macro = mod.getMacroConfig().getList().getMacro(index);
             String name = macro.getName();
-            this.buttonList.add(new GuiButton(index, 15 + (70 * column++), 30 + (30 * row), 50, 20, macro.getColor() + name));
+            this.buttonList.add(new GuiButton(index, 15 + (70 * column++), 30 + (30 * row), 50, 20,
+                    macro.getColor() + name));
             if (column > buttonsPerRow)
             {
                 column = 0;
@@ -35,19 +36,20 @@ public class MacroMenu extends GuiScreen
             }
         }
     }
-    
+
     @Override
     public void drawScreen(int mouseX, int mouseY, float f)
     {
         drawDefaultBackground();
-        drawCenteredString(fontRendererObj, "Choose a macro for: " + name, this.width / 2, 10, 0xFFFFFFFF);
-        
+        drawCenteredString(fontRendererObj, "Choose a macro for: " + name, this.width / 2, 10,
+                0xFFFFFFFF);
+
         for (int i = 0; i < this.buttonList.size(); i++)
         {
             ((GuiButton) this.buttonList.get(i)).drawButton(this.mc, mouseX, mouseY);
         }
     }
-    
+
     @Override
     public void actionPerformed(GuiButton button)
     {
@@ -56,12 +58,12 @@ public class MacroMenu extends GuiScreen
         sendCommand(cmd);
         mc.setIngameFocus();
     }
-    
+
     private void sendCommand(String command)
     {
         sendChatMessage(command.replaceAll("%p|%P", name));
     }
-    
+
     public void setName(String name)
     {
         this.name = name;
