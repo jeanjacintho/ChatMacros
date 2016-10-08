@@ -121,6 +121,12 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
         {
             if (args[1].equalsIgnoreCase("copy"))
             {
+                int lCtrl = Keyboard.KEY_LCONTROL;
+                int rCtrl = Keyboard.KEY_RCONTROL;
+                if (!Keyboard.isKeyDown(lCtrl) && !Keyboard.isKeyDown(rCtrl))
+                {
+                    return false;
+                }
                 String toCopy = args[2];
                 for (int i = 3; i < args.length; i++)
                 {
