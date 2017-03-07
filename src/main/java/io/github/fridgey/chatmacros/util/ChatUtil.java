@@ -19,16 +19,7 @@ public class ChatUtil
         {
             return Optional.absent();
         }
-        String delimiter = "";
-        if (noColorMessage.substring(0, noColorMessage.indexOf(" ")).contains("="))
-        {
-        	delimiter = "=";
-        }
-        else if (noColorMessage.substring(0, noColorMessage.indexOf(" ")).contains("|"))
-        {
-        	delimiter = "\\|";
-        }
-        String[] firstParts = noColorMessage.substring(0, noColorMessage.indexOf(" ")).split(delimiter);
+        String[] firstParts = noColorMessage.substring(0, noColorMessage.indexOf(" ")).split("\\|");
         // If the length isn't at least 2 then this is not a chat message.
         if (firstParts.length <= 1)
         {
@@ -74,6 +65,6 @@ public class ChatUtil
         {
             return message;
         }
-		return firstParts[0] + "|" + firstParts[firstParts.length - 1] + chat;
+        return firstParts[0] + "|" + firstParts[firstParts.length - 1] + chat;
     }
 }
