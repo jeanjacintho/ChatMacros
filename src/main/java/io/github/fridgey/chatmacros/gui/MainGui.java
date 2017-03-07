@@ -98,7 +98,7 @@ public class MainGui extends GuiScreen
     {
         super.mouseClicked(mouseX, mouseY, mouseButton);
         if (mouseX < 15 || mouseX > this.width - 15 || mouseY > this.height - 24
-                || mouseY < (this.height - 24) - (10 * getShownChatLines()))
+                || mouseY < (this.height - 24) - (10 * getShownChatLines()) || mouseButton == -1)
         {
             return;
         }

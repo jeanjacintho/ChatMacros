@@ -9,7 +9,7 @@ import net.md_5.bungee.api.ChatColor;
 public class ChatUtil
 {
     private static final Pattern CHANNEL_PATTERN = Pattern
-            .compile("(\\[(G|W|H|T|L|F|S|P|A|PM){1}\u25AA?(B1|B2|B3|B4|S|G|N|M|MG|PvP)?\\]){1}");
+            .compile("(\\[(G|W|H|T|L|F|S|P|A|PM|\u0053\u0070\u0079){1}\u25AA?(B1|B2|B3|B4|S|G|N|M|MG|PvP|SP)?\\]){1}");
     private static final Pattern NAME_PATTERN = Pattern.compile("(\\[(\\S)+( -> Me)?\\]){1}");
 
     public static Optional<String> parseChat(String message)
@@ -19,18 +19,27 @@ public class ChatUtil
         {
             return Optional.absent();
         }
-        String[] firstParts = noColorMessage.substring(0, noColorMessage.indexOf(" ")).split("=");
+        String delimiter = "";
+        if (noColorMessage.substring(0, noColorMessage.indexOf(" ")).contains("="))
+        {
+        	delimiter = "=";
+        }
+        else if (noColorMessage.substring(0, noColorMessage.indexOf(" ")).contains("|"))
+        {
+        	delimiter = "\\|";
+        }
+        String[] firstParts = noColorMessage.substring(0, noColorMessage.indexOf(" ")).split(delimiter);
         // If the length isn't at least 2 then this is not a chat message.
         if (firstParts.length <= 1)
         {
             return Optional.absent();
         }
-        // If the first part isnt a channel and/or world name then this is not a chat message.
+        // If the first part isn't a channel and/or world name then this is not a chat message.
         if (!CHANNEL_PATTERN.matcher(firstParts[0]).matches())
         {
             return Optional.absent();
         }
-        // If the last part isnt a name then this is not a chat message.
+        // If the last part isn't a name then this is not a chat message.
         String checkName = firstParts[firstParts.length - 1];
         if (!checkName.endsWith("]"))
         {
@@ -58,13 +67,13 @@ public class ChatUtil
 
     public static String stripTags(String message)
     {
-        String[] firstParts = message.substring(0, message.indexOf(" ")).split("=");
+        String[] firstParts = message.substring(0, message.indexOf(" ")).split("\\|");
         String chat = message.substring(message.indexOf(" "));
 
         if (firstParts.length < 3)
         {
             return message;
         }
-        return firstParts[0] + "=" + firstParts[firstParts.length - 1] + chat;
+		return firstParts[0] + "|" + firstParts[firstParts.length - 1] + chat;
     }
 }

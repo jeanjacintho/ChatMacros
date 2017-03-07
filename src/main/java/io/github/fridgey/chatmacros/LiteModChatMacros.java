@@ -84,7 +84,7 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
     @Override
     public String getVersion()
     {
-        return ChatColor.AQUA.toString() + ChatColor.BOLD + "2.0";
+        return ChatColor.AQUA.toString() + ChatColor.BOLD + "3.0";
     }
 
     @Override
@@ -95,7 +95,7 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
     public void onChat(ITextComponent chat, String message)
     {
         String newMessage =
-                message.replaceAll(String.valueOf(ChatColor.COLOR_CHAR), "&").replace("&r", "");
+                message.replace(String.valueOf(ChatColor.COLOR_CHAR), "&").replace("&r", "");
 
         chat.getStyle().setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/cm copy " + newMessage));
         if (ChatUtil.parseChat(message.replace(ChatColor.RESET.toString(), "")).isPresent())
