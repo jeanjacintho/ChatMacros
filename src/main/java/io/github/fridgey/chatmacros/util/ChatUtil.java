@@ -9,7 +9,7 @@ import net.md_5.bungee.api.ChatColor;
 public class ChatUtil
 {
     private static final Pattern CHANNEL_PATTERN = Pattern
-            .compile("(\\[(G|W|H|T|L|F|S|P|A|PM|SPY){1}\u25AA?(B1|B2|B3|B4|S|G|N|M|MG|PvP|SP)?\\]){1}");
+            .compile("(\\[(G|W|H|T|L|F|S|P|A|PM|Spy){1}\u25AA?(B1|B2|B3|B4|S|G|N|M|MG|PvP|SP)?\\]){1}");
     private static final Pattern NAME_PATTERN = Pattern.compile("(\\[(\\S)+( -> Me)?\\]){1}");
 
     public static Optional<String> parseChat(String message)
@@ -19,7 +19,16 @@ public class ChatUtil
         {
             return Optional.absent();
         }
-        String[] firstParts = noColorMessage.substring(0, noColorMessage.indexOf(" ")).split("\\|");
+        String delimiter = "";
+        String tags = noColorMessage.substring(0, noColorMessage.indexOf(" "));
+        if (tags.contains("="))
+        {
+            delimiter = "=";
+        } else if (tags.contains("|"))
+        {
+            delimiter = "\\|";
+        }
+        String[] firstParts = tags.split(delimiter);
         // If the length isn't at least 2 then this is not a chat message.
         if (firstParts.length <= 1)
         {
