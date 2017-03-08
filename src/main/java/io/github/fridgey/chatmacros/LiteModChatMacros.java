@@ -84,12 +84,11 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
     @Override
     public String getVersion()
     {
-        return ChatColor.AQUA.toString() + ChatColor.BOLD + "3.0";
+        return ChatColor.AQUA.toString() + ChatColor.BOLD + "2.3";
     }
 
     @Override
-    public void upgradeSettings(String version, File configPath, File oldConfigPath)
-    {}
+    public void upgradeSettings(String version, File configPath, File oldConfigPath) {}
 
     @Override
     public void onChat(ITextComponent chat, String message)

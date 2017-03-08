@@ -9,7 +9,7 @@ import net.md_5.bungee.api.ChatColor;
 public class ChatUtil
 {
     private static final Pattern CHANNEL_PATTERN = Pattern
-            .compile("(\\[(G|W|H|T|L|F|S|P|A|PM|\u0053\u0070\u0079){1}\u25AA?(B1|B2|B3|B4|S|G|N|M|MG|PvP|SP)?\\]){1}");
+            .compile("(\\[(G|W|H|T|L|F|S|P|A|PM|SPY){1}\u25AA?(B1|B2|B3|B4|S|G|N|M|MG|PvP|SP)?\\]){1}");
     private static final Pattern NAME_PATTERN = Pattern.compile("(\\[(\\S)+( -> Me)?\\]){1}");
 
     public static Optional<String> parseChat(String message)
