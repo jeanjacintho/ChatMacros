@@ -1,4 +1,4 @@
-package io.github.fridgey.chatmacros.gui;
+package io.github.fridgey.chatmacros.gui.component;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;

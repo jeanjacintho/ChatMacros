@@ -1,4 +1,4 @@
-package io.github.fridgey.chatmacros.gui;
+package io.github.fridgey.chatmacros.gui.menu;
 
 import java.io.IOException;
 

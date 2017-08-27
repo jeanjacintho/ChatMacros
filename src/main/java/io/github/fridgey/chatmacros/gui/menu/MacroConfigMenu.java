@@ -1,10 +1,11 @@
-package io.github.fridgey.chatmacros.gui;
+package io.github.fridgey.chatmacros.gui.menu;
 
 import java.io.IOException;
 
 import org.lwjgl.input.Keyboard;
 
 import io.github.fridgey.chatmacros.LiteModChatMacros;
+import io.github.fridgey.chatmacros.gui.component.GuiToggleField;
 import io.github.fridgey.chatmacros.macro.Macro;
 import io.github.fridgey.chatmacros.macro.MasterMacroList;
 import net.md_5.bungee.api.ChatColor;

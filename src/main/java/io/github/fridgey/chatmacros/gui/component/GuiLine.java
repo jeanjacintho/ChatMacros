@@ -1,4 +1,6 @@
-package io.github.fridgey.chatmacros.gui;
+package io.github.fridgey.chatmacros.gui.component;
+
+import io.github.fridgey.chatmacros.gui.menu.MainGui;
 
 public class GuiLine
 {

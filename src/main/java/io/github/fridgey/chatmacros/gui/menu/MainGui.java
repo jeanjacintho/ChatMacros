@@ -1,4 +1,4 @@
-package io.github.fridgey.chatmacros.gui;
+package io.github.fridgey.chatmacros.gui.menu;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -9,6 +9,8 @@ import java.util.Map;
 import org.lwjgl.input.Mouse;
 
 import io.github.fridgey.chatmacros.LiteModChatMacros;
+import io.github.fridgey.chatmacros.gui.component.GuiLine;
+import io.github.fridgey.chatmacros.gui.component.GuiSelection;
 import io.github.fridgey.chatmacros.util.ChatUtil;
 import net.md_5.bungee.api.ChatColor;
 import net.minecraft.client.gui.FontRenderer;
@@ -55,9 +57,18 @@ public class MainGui extends GuiScreen
         for (int i = index; i < Math.min(mod.getGuiConfig().getChatLines(), guiLines.size())
                 + index; i++)
         {
+            if (mouseX > 15 && mouseX < this.width - 15)
+            {
+                if (mouseY < this.height - 24 - (i * 10) && mouseY >= this.height - 34 - (i * 10))
+                {
+                    GuiSelection.draw(this, 15, this.height - 34 - (i * 10), this.width - 15, this.height - 25 - (i * 10) + 1);
+                }
+            }
+            
             GuiLine line = guiLines.get(i);
             line.draw(this, (this.height - 33) - (10 * c));
             currentChatLinePositions.put((this.height - 33) - (10 * c), line);
+            
             c++;
         }
 

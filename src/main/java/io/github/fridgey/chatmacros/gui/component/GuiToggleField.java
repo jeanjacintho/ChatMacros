@@ -1,4 +1,4 @@
-package io.github.fridgey.chatmacros.gui;
+package io.github.fridgey.chatmacros.gui.component;
 
 import io.github.fridgey.chatmacros.util.StringUtil;
 import net.md_5.bungee.api.ChatColor;

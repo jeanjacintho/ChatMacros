@@ -16,21 +16,25 @@ import com.mumfrey.liteloader.modconfig.ExposableOptions;
 
 import io.github.fridgey.chatmacros.config.GuiConfig;
 import io.github.fridgey.chatmacros.config.MacroConfig;
-import io.github.fridgey.chatmacros.gui.MacroConfigMenu;
-import io.github.fridgey.chatmacros.gui.MacroMenu;
-import io.github.fridgey.chatmacros.gui.MainGui;
-import io.github.fridgey.chatmacros.gui.SettingsMenu;
+import io.github.fridgey.chatmacros.gui.menu.MacroConfigMenu;
+import io.github.fridgey.chatmacros.gui.menu.MacroMenu;
+import io.github.fridgey.chatmacros.gui.menu.MainGui;
+import io.github.fridgey.chatmacros.gui.menu.SettingsMenu;
 import io.github.fridgey.chatmacros.util.ChatUtil;
-import net.md_5.bungee.api.ChatColor;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.multiplayer.ServerData;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.network.INetHandler;
 import net.minecraft.network.play.server.SPacketJoinGame;
 import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.util.text.event.ClickEvent;
 import net.minecraft.util.text.event.ClickEvent.Action;
+
+import static net.md_5.bungee.api.ChatColor.*;
 
 @ExposableOptions(strategy = ConfigStrategy.Versioned, filename = "chatmacros.json")
 public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListener,
@@ -55,8 +59,8 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
     public void init(File configPath)
     {
         activateKeyBinding = new KeyBinding(
-                ChatColor.translateAlternateColorCodes('&', "&6&l&n&oActivate Chat Macros Mod"),
-                Keyboard.CHAR_NONE, ChatColor.translateAlternateColorCodes('&', "&a&l&n&oFridgey"));
+                translateAlternateColorCodes('&', "&6&l&n&oActivate Chat Macros Mod"),
+                Keyboard.CHAR_NONE, translateAlternateColorCodes('&', "&a&l&n&oFridgey"));
         LiteLoader.getInput().registerKeyBinding(activateKeyBinding);
 
         this.guiConfig = new GuiConfig();
@@ -78,26 +82,26 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
     @Override
     public String getName()
     {
-        return ChatColor.DARK_GREEN.toString() + ChatColor.BOLD + "ChatMacros";
+        return DARK_GREEN.toString() + BOLD + "ChatMacros";
     }
 
     @Override
     public String getVersion()
     {
-        return ChatColor.AQUA.toString() + ChatColor.BOLD + "2.3";
+        return AQUA.toString() + BOLD + "2.5";
     }
 
     @Override
-    public void upgradeSettings(String version, File configPath, File oldConfigPath) {}
+    public void upgradeSettings(String version, File configPath, File oldConfigPath)
+    {}
 
     @Override
     public void onChat(ITextComponent chat, String message)
     {
-        String newMessage =
-                message.replace(String.valueOf(ChatColor.COLOR_CHAR), "&").replace("&r", "");
+        String newMessage = message.replace(String.valueOf(COLOR_CHAR), "&").replace("&r", "");
 
         chat.getStyle().setClickEvent(new ClickEvent(Action.RUN_COMMAND, "/cm copy " + newMessage));
-        if (ChatUtil.parseChat(message.replace(ChatColor.RESET.toString(), "")).isPresent())
+        if (ChatUtil.parseChat(message.replace(RESET.toString(), "")).isPresent())
         {
             mainOverview.addChatLine(newMessage);
         }
@@ -106,6 +110,7 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
     @Override
     public boolean onSendChatMessage(String message)
     {
+        EntityPlayerSP player = Minecraft.getMinecraft().thePlayer;
         String[] args = message.split(" ");
         if (args.length == 0 || !args[0].equalsIgnoreCase("/cm"))
         {
@@ -134,19 +139,26 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
                 toCopy = toCopy.trim();
                 if (!guiConfig.copyWithColors())
                 {
-                    toCopy = ChatColor
-                            .stripColor(ChatColor.translateAlternateColorCodes('&', toCopy));
+                    toCopy = stripColor(translateAlternateColorCodes('&', toCopy));
                 }
                 if (!guiConfig.displayFactionAndRankTags())
                 {
                     toCopy = ChatUtil.stripTags(toCopy);
                 }
                 GuiScreen.setClipboardString(toCopy.trim());
-
-                return false;
+            } else if (args[1].equalsIgnoreCase("help"))
+            {
+                ITextComponent comp1 = new TextComponentString(translateAlternateColorCodes('&',
+                        "&8[&a!&8] &aChat Macros Help &8[&a!&8]"));
+                ITextComponent comp2 = new TextComponentString(translateAlternateColorCodes('&',
+                        "&9- &7To copy chat messages from normal chat window: Hold ctrl + left click."));
+                comp1.getStyle().setColor(TextFormatting.GRAY);
+                comp2.getStyle().setColor(TextFormatting.GRAY);
+                player.addChatMessage(comp1);
+                player.addChatMessage(comp2);
             }
         }
-        return true;
+        return false;
     }
 
     @Override
@@ -163,6 +175,9 @@ public class LiteModChatMacros implements Tickable, JoinGameListener, ChatListen
             ServerData serverData, RealmsServer realmsServer)
     {
         mainOverview.clearChatLines();
+        Minecraft.getMinecraft().thePlayer
+                .addChatMessage(new TextComponentString(translateAlternateColorCodes('&',
+                        "&8[&a!&8] &aChat Macros &8[&a!&8] &7For more info type: &f/cm help")));
     }
 
     public static LiteModChatMacros getInstance()
